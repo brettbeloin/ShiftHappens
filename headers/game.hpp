@@ -13,7 +13,7 @@ public:
       : correct_guesses(correct_guesses), wrong_guesses(wrong_guesses),
         accuracy(accuracy), round_number(round_number) {}
 
-  void Start(Game game);
+  void Start();
 
   int GetInitValue() const { return init_value; }
   int GetShiftValue() const { return shift_value; }
@@ -89,6 +89,6 @@ private:
   void DisplayBitValue(uint8_t init_value, uint8_t shift_value);
 
   bool CheckGuess(int guess, int shifted_value);
-  void PlayField(int value_shift, Game game);
+  void PlayField(int value_shift);
   bool PlayAgain();
 };

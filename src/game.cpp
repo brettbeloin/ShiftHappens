@@ -20,7 +20,16 @@ int Game::GetUserInput() {
     std::cout << "Enter your choice: ";
     std::cin >> user_input;
 
+    if (std::cin.fail()) {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cerr
+          << "Bad input. All inputs must be numaric and fit in the range\n";
+      continue;
+    }
+
     if (user_input < 1 || user_input > 6) {
+      std::cerr << "Bad input. Input must be between: 1 and 6\n";
       continue;
     }
 
@@ -44,71 +53,71 @@ bool Game::CheckGuess(int guess, int shifted_value) {
   return guess == shifted_value;
 }
 
-void Game::Start(Game game) {
-  bool is_playing = true;
+void Game::Start() {
+  // bool is_playing = true;
 
   std::cout << "Welcome to the Bit Shift Game!\n";
-  std::cout << "Round: " << game.GetRoundNumber() << "\n";
-  std::cout << game.ToString() << std::endl;
+  std::cout << "Round: " << this->GetRoundNumber() << "\n";
+  std::cout << this->ToString() << std::endl;
 
   do {
     switch (GetUserInput()) {
     case 1:
-      GetShiftValues(game.GetInitValue(), game.GetShiftValue());
-      game.SetShiftedValue(game.GetInitValue() << game.GetShiftValue());
+      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
+      this->SetShiftedValue(this->GetInitValue() << this->GetShiftValue());
 
-      game.PlayField(game.GetShiftedValue(), game);
+      this->PlayField(this->GetShiftedValue());
       break;
     case 2:
-      GetShiftValues(game.GetInitValue(), game.GetShiftValue());
-      game.SetShiftedValue(game.GetInitValue() >> game.GetShiftValue());
+      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
+      this->SetShiftedValue(this->GetInitValue() >> this->GetShiftValue());
 
-      game.PlayField(game.GetShiftedValue(), game);
+      this->PlayField(this->GetShiftedValue());
       break;
     case 3:
-      GetShiftValues(game.GetInitValue(), game.GetShiftValue());
+      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
 
-      if ((game.GetInitValue() < 0 || game.GetInitValue() > 255) &&
-          (game.GetShiftValue() < 0 || game.GetShiftValue() > 255)) {
-        GetShiftValues(game.GetInitValue(), game.GetShiftValue());
+      if ((this->GetInitValue() < 0 || this->GetInitValue() > 255) &&
+          (this->GetShiftValue() < 0 || this->GetShiftValue() > 255)) {
+        GetShiftValues(this->GetInitValue(), this->GetShiftValue());
       }
 
-      game.SetShiftedValue(game.GetInitValue() & game.GetShiftValue());
-      DisplayBitValue(game.GetInitValue(), game.GetShiftValue());
+      this->SetShiftedValue(this->GetInitValue() & this->GetShiftValue());
+      DisplayBitValue(this->GetInitValue(), this->GetShiftValue());
 
-      game.PlayField(game.GetShiftedValue(), game);
+      this->PlayField(this->GetShiftedValue());
       break;
     case 4:
-      GetShiftValues(game.GetInitValue(), game.GetShiftValue());
+      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
 
-      if ((game.GetInitValue() < 0 || game.GetInitValue() > 255) &&
-          (game.GetShiftValue() < 0 || game.GetShiftValue() > 255)) {
-        GetShiftValues(game.GetInitValue(), game.GetShiftValue());
+      if ((this->GetInitValue() < 0 || this->GetInitValue() > 255) &&
+          (this->GetShiftValue() < 0 || this->GetShiftValue() > 255)) {
+        GetShiftValues(this->GetInitValue(), this->GetShiftValue());
       }
 
-      game.SetShiftedValue(game.GetInitValue() | game.GetShiftValue());
-      DisplayBitValue(game.GetInitValue(), game.GetShiftValue());
+      this->SetShiftedValue(this->GetInitValue() | this->GetShiftValue());
+      DisplayBitValue(this->GetInitValue(), this->GetShiftValue());
 
-      game.PlayField(game.GetShiftedValue(), game);
+      this->PlayField(this->GetShiftedValue());
       break;
     case 5:
       std::cout << "The Random game is not Implemented yet" << std::endl;
       continue;
-      // game.PlayField(shifted_value, game);
+      // this->.PlayField(shifted_value, this->);
       // break;
     case 6:
       std::cout << "Exiting the game. Goodbye!" << std::endl;
-      is_playing = false;
-      break;
+      // is_playing = false;
+      return;
     default:
-      std::cout << "Invalid selection. Exiting the game." << std::endl;
+      std::cout << "Invalid selection. Exiting the this->." << std::endl;
     }
 
     std::cout << std::endl;
-  } while (is_playing);
+  } while (PlayAgain());
 
   std::cout << "Thank you for playing the Bit Shift Game!" << std::endl;
-  std::cout << game.ToString();
+  std::cout << this->ToString();
 }
 
 void Game::DisplayBitValue(uint8_t init_value, uint8_t shift_value) {
@@ -119,28 +128,26 @@ void Game::DisplayBitValue(uint8_t init_value, uint8_t shift_value) {
   std::cout << "Binary view: " << std::bitset<8>(shift_value) << std::endl;
 }
 
-void Game::PlayField(int shifted_value, Game game) {
+void Game::PlayField(int shifted_value) {
   std::cout << "Guess the shifted value: ";
   std::cin >> guess_value;
-  game.SetGuessValue(guess_value);
+  this->SetGuessValue(guess_value);
 
-  if (CheckGuess(game.GetGuessValue(), shifted_value)) {
+  if (CheckGuess(this->GetGuessValue(), shifted_value)) {
     std::cout << "Congratulations! Your guess is correct." << std::endl;
-    game.SetCorrectGuesses(game.GetCorrectGuesses() + 1);
+    this->SetCorrectGuesses(this->GetCorrectGuesses() + 1);
   } else {
     std::cout << "Sorry, your guess is incorrect. The correct value is: "
-              << game.GetShiftedValue() << std::endl;
-    game.SetWrongGuesses(game.GetWrongGuesses() + 1);
+              << this->GetShiftedValue() << std::endl;
+    this->SetWrongGuesses(this->GetWrongGuesses() + 1);
   }
 
-  game.SetRoundNumber(game.GetRoundNumber() + 1);
-  game.SetAccuracy();
+  this->SetRoundNumber(this->GetRoundNumber() + 1);
+  this->SetAccuracy();
 
-  if (PlayAgain()) {
-    Start(Game(game.GetCorrectGuesses(), game.GetWrongGuesses(),
-               game.GetAccuracy(), game.GetRoundNumber()));
-    return;
-  }
+  // if (PlayAgain()) {
+  //   Start();
+  // }
 }
 
 bool Game::PlayAgain() {
