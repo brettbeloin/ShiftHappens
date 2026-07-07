@@ -3,6 +3,72 @@
 #include <iostream>
 #include <string>
 
+void Game::Start() {
+  std::cout << "Welcome to the Bit Shift Game!\n";
+  std::cout << "Round: " << this->GetRoundNumber() << "\n";
+  std::cout << this->ToString() << std::endl;
+
+  do {
+    switch (GetUserInput()) {
+    case 1:
+      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
+      this->SetShiftedValue(this->GetInitValue() << this->GetShiftValue());
+
+      this->PlayField(this->GetShiftedValue());
+      break;
+    case 2:
+      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
+      this->SetShiftedValue(this->GetInitValue() >> this->GetShiftValue());
+
+      this->PlayField(this->GetShiftedValue());
+      break;
+    case 3:
+      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
+
+      if ((this->GetInitValue() < 0 || this->GetInitValue() > 255) &&
+          (this->GetShiftValue() < 0 || this->GetShiftValue() > 255)) {
+        GetShiftValues(this->GetInitValue(), this->GetShiftValue());
+      }
+
+      this->SetShiftedValue(this->GetInitValue() & this->GetShiftValue());
+      DisplayBitValue(this->GetInitValue(), this->GetShiftValue());
+
+      this->PlayField(this->GetShiftedValue());
+      break;
+    case 4:
+      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
+
+      if ((this->GetInitValue() < 0 || this->GetInitValue() > 255) &&
+          (this->GetShiftValue() < 0 || this->GetShiftValue() > 255)) {
+        GetShiftValues(this->GetInitValue(), this->GetShiftValue());
+      }
+
+      this->SetShiftedValue(this->GetInitValue() | this->GetShiftValue());
+      DisplayBitValue(this->GetInitValue(), this->GetShiftValue());
+
+      this->PlayField(this->GetShiftedValue());
+      break;
+    case 5:
+      std::cout << "The Random game is not Implemented yet" << std::endl;
+      continue;
+      // this->.PlayField(shifted_value, this->);
+      // break;
+    case 6:
+      std::cout << "Exiting the game. Goodbye!" << std::endl;
+      std::cout << this->ToString();
+      // is_playing = false;
+      return;
+    default:
+      std::cout << "Invalid selection. Exiting the this->." << std::endl;
+    }
+
+    std::cout << std::endl;
+  } while (PlayAgain());
+
+  std::cout << "Thank you for playing the Bit Shift Game!" << std::endl;
+  std::cout << this->ToString();
+}
+
 int Game::GetUserInput() {
   int user_input;
   std::string string_user_input;
@@ -78,84 +144,6 @@ void Game::GetShiftValues(int init_value, int shift_value) {
   } while (!valid_answer);
 }
 
-bool Game::CheckGuess(const int guess, int shifted_value) {
-  return guess == shifted_value;
-}
-
-void Game::Start() {
-  std::cout << "Welcome to the Bit Shift Game!\n";
-  std::cout << "Round: " << this->GetRoundNumber() << "\n";
-  std::cout << this->ToString() << std::endl;
-
-  do {
-    switch (GetUserInput()) {
-    case 1:
-      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-      this->SetShiftedValue(this->GetInitValue() << this->GetShiftValue());
-
-      this->PlayField(this->GetShiftedValue());
-      break;
-    case 2:
-      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-      this->SetShiftedValue(this->GetInitValue() >> this->GetShiftValue());
-
-      this->PlayField(this->GetShiftedValue());
-      break;
-    case 3:
-      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-
-      if ((this->GetInitValue() < 0 || this->GetInitValue() > 255) &&
-          (this->GetShiftValue() < 0 || this->GetShiftValue() > 255)) {
-        GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-      }
-
-      this->SetShiftedValue(this->GetInitValue() & this->GetShiftValue());
-      DisplayBitValue(this->GetInitValue(), this->GetShiftValue());
-
-      this->PlayField(this->GetShiftedValue());
-      break;
-    case 4:
-      GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-
-      if ((this->GetInitValue() < 0 || this->GetInitValue() > 255) &&
-          (this->GetShiftValue() < 0 || this->GetShiftValue() > 255)) {
-        GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-      }
-
-      this->SetShiftedValue(this->GetInitValue() | this->GetShiftValue());
-      DisplayBitValue(this->GetInitValue(), this->GetShiftValue());
-
-      this->PlayField(this->GetShiftedValue());
-      break;
-    case 5:
-      std::cout << "The Random game is not Implemented yet" << std::endl;
-      continue;
-      // this->.PlayField(shifted_value, this->);
-      // break;
-    case 6:
-      std::cout << "Exiting the game. Goodbye!" << std::endl;
-      std::cout << this->ToString();
-      // is_playing = false;
-      return;
-    default:
-      std::cout << "Invalid selection. Exiting the this->." << std::endl;
-    }
-
-    std::cout << std::endl;
-  } while (PlayAgain());
-
-  std::cout << "Thank you for playing the Bit Shift Game!" << std::endl;
-  std::cout << this->ToString();
-}
-
-void Game::DisplayBitValue(uint8_t init_value, uint8_t shift_value) {
-  std::cout << init_value << std::endl;
-  std::cout << "Binary view: " << std::bitset<8>(init_value) << std::endl;
-
-  std::cout << shift_value << std::endl;
-  std::cout << "Binary view: " << std::bitset<8>(shift_value) << std::endl;
-}
-
 void Game::PlayField(int shifted_value) {
   std::string foo;
   bool valid_answer = false;
@@ -165,8 +153,6 @@ void Game::PlayField(int shifted_value) {
     if (!ValidateUserInput(foo, this->guess_value)) {
       continue;
     }
-
-    // this->SetGuessValue(guess_value);
 
     if (CheckGuess(this->GetGuessValue(), shifted_value)) {
       std::cout << "Congratulations! Your guess is correct." << std::endl;
@@ -182,6 +168,18 @@ void Game::PlayField(int shifted_value) {
 
   this->SetRoundNumber(this->GetRoundNumber() + 1);
   this->SetAccuracy();
+}
+
+bool Game::CheckGuess(const int guess, int shifted_value) {
+  return guess == shifted_value;
+}
+
+void Game::DisplayBitValue(uint8_t init_value, uint8_t shift_value) {
+  std::cout << init_value << std::endl;
+  std::cout << "Binary view: " << std::bitset<8>(init_value) << std::endl;
+
+  std::cout << shift_value << std::endl;
+  std::cout << "Binary view: " << std::bitset<8>(shift_value) << std::endl;
 }
 
 bool Game::PlayAgain() {
