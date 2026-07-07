@@ -1,36 +1,33 @@
 #include "game.hpp"
 #include <bitset>
 #include <iostream>
-#include <ostream>
+#include <string>
 
 int Game::GetUserInput() {
   int user_input;
+  std::string string_user_input;
+
   bool valid_answer = false;
-  std::string menu = "Select Mode: \n"
-                     "1. Shift Left\n"
-                     "2. Shift Right\n"
-                     "3. AND Shift (0 - 255)\n"
-                     "4. OR Shift (0 - 255)\n"
-                     "5. Random mode (Not Implamented)\n"
-                     "6. Quit";
+  const std::string menu = "Select Mode: \n"
+                           "1. Shift Left\n"
+                           "2. Shift Right\n"
+                           "3. AND Shift (0 - 255)\n"
+                           "4. OR Shift (0 - 255)\n"
+                           "5. Random mode (Not Implamented)\n"
+                           "6. Quit";
 
   do {
     std::cout << menu << std::endl;
     std::cout << "-------------------------" << std::endl;
     std::cout << "Enter your choice: ";
-    std::cin >> user_input;
 
-    if (std::cin.fail()) {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::cerr
-          << "Bad input. All inputs must be numaric and fit in the range\n";
+    if (!ValidateUserInput(string_user_input, user_input)) {
       continue;
     }
 
     if (user_input < 1 || user_input > 6) {
       std::cerr << "Bad input. Input must be between: 1 and 6\n";
-      continue;
+      return false;
     }
 
     valid_answer = true;
@@ -39,23 +36,53 @@ int Game::GetUserInput() {
   return user_input;
 }
 
-void Game::GetShiftValues(int init_value, int shift_value) {
-  std::cout << "Enter the initial value (integer): ";
-  std::cin >> init_value;
-  SetInitValue(init_value);
+bool Game::ValidateUserInput(std::string &string_user_input, int &user_input) {
+  std::getline(std::cin, string_user_input);
+  std::istringstream iss(trim(string_user_input));
+  iss >> user_input;
 
-  std::cout << "Enter the number of bits to shift (integer): ";
-  std::cin >> shift_value;
-  SetShiftValue(shift_value);
+  if (!iss.eof()) {
+    std::cerr << "Bad input. All inputs must be numeric and fit in the range\n";
+    return false;
+  }
+
+  if (iss.fail()) {
+    iss.clear();
+    iss.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cerr << "Bad input. All inputs must be numeric and fit in the range\n";
+    return false;
+  }
+
+  return true;
 }
 
-bool Game::CheckGuess(int guess, int shifted_value) {
+void Game::GetShiftValues(int init_value, int shift_value) {
+  std::string foo;
+  std::string bar;
+  bool valid_answer = false;
+
+  do {
+    std::cout << "Enter the initial value (integer): ";
+    if (!ValidateUserInput(foo, init_value)) {
+      continue;
+    }
+    SetInitValue(init_value);
+
+    std::cout << "Enter the number of bits to shift (integer): ";
+    if (!ValidateUserInput(bar, shift_value)) {
+      continue;
+    }
+
+    SetShiftValue(shift_value);
+    valid_answer = true;
+  } while (!valid_answer);
+}
+
+bool Game::CheckGuess(const int guess, int shifted_value) {
   return guess == shifted_value;
 }
 
 void Game::Start() {
-  // bool is_playing = true;
-
   std::cout << "Welcome to the Bit Shift Game!\n";
   std::cout << "Round: " << this->GetRoundNumber() << "\n";
   std::cout << this->ToString() << std::endl;
@@ -107,6 +134,7 @@ void Game::Start() {
       // break;
     case 6:
       std::cout << "Exiting the game. Goodbye!" << std::endl;
+      std::cout << this->ToString();
       // is_playing = false;
       return;
     default:
@@ -129,31 +157,52 @@ void Game::DisplayBitValue(uint8_t init_value, uint8_t shift_value) {
 }
 
 void Game::PlayField(int shifted_value) {
-  std::cout << "Guess the shifted value: ";
-  std::cin >> guess_value;
-  this->SetGuessValue(guess_value);
+  std::string foo;
+  bool valid_answer = false;
 
-  if (CheckGuess(this->GetGuessValue(), shifted_value)) {
-    std::cout << "Congratulations! Your guess is correct." << std::endl;
-    this->SetCorrectGuesses(this->GetCorrectGuesses() + 1);
-  } else {
-    std::cout << "Sorry, your guess is incorrect. The correct value is: "
-              << this->GetShiftedValue() << std::endl;
-    this->SetWrongGuesses(this->GetWrongGuesses() + 1);
-  }
+  do {
+    std::cout << "Guess the shifted value: ";
+    if (!ValidateUserInput(foo, this->guess_value)) {
+      continue;
+    }
+
+    // this->SetGuessValue(guess_value);
+
+    if (CheckGuess(this->GetGuessValue(), shifted_value)) {
+      std::cout << "Congratulations! Your guess is correct." << std::endl;
+      this->SetCorrectGuesses(this->GetCorrectGuesses() + 1);
+    } else {
+      std::cout << "Sorry, your guess is incorrect. The correct value is: "
+                << this->GetShiftedValue() << std::endl;
+      this->SetWrongGuesses(this->GetWrongGuesses() + 1);
+    }
+
+    valid_answer = true;
+  } while (!valid_answer);
 
   this->SetRoundNumber(this->GetRoundNumber() + 1);
   this->SetAccuracy();
-
-  // if (PlayAgain()) {
-  //   Start();
-  // }
 }
 
 bool Game::PlayAgain() {
-  bool is_playing;
-  std::cout << "Do you want to play again? (1 for Yes, 0 for No): ";
-  std::cin >> is_playing;
+  bool is_valid = false;
+  std::string foo;
+  int user_input;
 
-  return is_playing;
+  do {
+    std::cout << "Do you want to play again? (1 for Yes, 0 for No): ";
+
+    if (!ValidateUserInput(foo, user_input)) {
+      continue;
+    }
+
+    if (user_input < 0 || user_input > 1) {
+      std::cerr << "Bad input. Input must be (1 for Yes, 0 for No)\n";
+      continue;
+    }
+
+    is_valid = true;
+  } while (!is_valid);
+
+  return user_input == 1 ? true : false;
 }

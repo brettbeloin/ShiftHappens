@@ -15,6 +15,24 @@ public:
 
   void Start();
 
+  /*
+   * trim function and the WHITESPACE var comes from:
+   * https://www.scaler.com/topics/removing-whitespace-from-a-string-in-cpp/
+   */
+  std::string ltrim(const std::string &s) {
+    size_t start = s.find_first_not_of(WHITESPACE);
+    return (start == std::string::npos) ? "" : s.substr(start);
+  }
+
+  std::string rtrim(const std::string &s) {
+    size_t end = s.find_last_not_of(WHITESPACE);
+    return (end == std::string::npos) ? "" : s.substr(0, end + 1);
+  }
+
+  std::string trim(const std::string &s) { return rtrim(ltrim(s)); }
+
+  bool ValidateUserInput(std::string &string_user_input, int &user_input);
+
   int GetInitValue() const { return init_value; }
   int GetShiftValue() const { return shift_value; }
   int GetShiftedValue() const { return shifted_value; }
@@ -69,6 +87,8 @@ public:
   }
 
 private:
+  const std::string WHITESPACE = " \n\r\t\f\v";
+
   int init_value;
   int shift_value;
   int shifted_value;
