@@ -29,7 +29,7 @@ class Game {
 
     bool ValidateUserInput(std::string &string_user_input, int &user_input);
 
-    int GetInitValue() const {
+    int  GetInitValue() const {
         return init_value;
     }
     int GetShiftValue() const {
@@ -108,8 +108,7 @@ class Game {
     std::string ToString() {
         std::ostringstream ss;
 
-        ss << "Wins: " << correct_guesses << " Losses " << wrong_guesses << " Accuracy " << accuracy
-           << "%\n";
+        ss << "Wins: " << correct_guesses << " Losses " << wrong_guesses << " Accuracy " << accuracy << "%\n";
 
         return ss.str();
     }
@@ -117,26 +116,26 @@ class Game {
   private:
     const std::string WHITESPACE = " \n\r\t\f\v";
 
-    int init_value;
-    int shift_value;
-    int shifted_value;
-    int guess_value;
+    int               init_value;
+    int               shift_value;
+    int               shifted_value;
+    int               guess_value;
 
-    int random_init_value;
-    int random_shift_value;
+    int               random_init_value;
+    int               random_shift_value;
 
-    int correct_guesses = 0;
-    int wrong_guesses = 0;
-    float accuracy = 0;
+    int               correct_guesses = 0;
+    int               wrong_guesses = 0;
+    float             accuracy = 0;
 
-    int round_number = 1;
+    int               round_number = 1;
 
-    int GetUserInput();
+    int               GetUserInput();
 
-    void GetShiftValues(int init_value, int shift_value);
-    void DisplayBitValue(uint8_t init_value, uint8_t shift_value);
+    void              GetShiftValues(int init_value, int shift_value);
+    void              DisplayBitValue(uint8_t init_value, uint8_t shift_value);
 
-    bool CheckGuess(int guess, int shifted_value);
-    void PlayField(int value_shift);
-    bool PlayAgain();
+    bool              CheckGuess(int guess, int shifted_value);
+    void              PlayField(int value_shift);
+    bool              PlayAgain();
 };

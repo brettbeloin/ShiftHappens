@@ -70,10 +70,10 @@ void Game::Start() {
 }
 
 int Game::GetUserInput() {
-    int user_input;
-    std::string string_user_input;
+    int               user_input;
+    std::string       string_user_input;
 
-    bool valid_answer = false;
+    bool              valid_answer = false;
     const std::string menu = "Select Mode: \n"
                              "1. Shift Left\n"
                              "2. Shift Right\n"
@@ -125,7 +125,7 @@ bool Game::ValidateUserInput(std::string &string_user_input, int &user_input) {
 void Game::GetShiftValues(int init_value, int shift_value) {
     std::string foo;
     std::string bar;
-    bool valid_answer = false;
+    bool        valid_answer = false;
 
     do {
         std::cout << "Enter the initial value (integer): ";
@@ -146,7 +146,7 @@ void Game::GetShiftValues(int init_value, int shift_value) {
 
 void Game::PlayField(int shifted_value) {
     std::string foo;
-    bool valid_answer = false;
+    bool        valid_answer = false;
 
     do {
         std::cout << "Guess the shifted value: ";
@@ -158,8 +158,8 @@ void Game::PlayField(int shifted_value) {
             std::cout << "Congratulations! Your guess is correct." << std::endl;
             this->SetCorrectGuesses(this->GetCorrectGuesses() + 1);
         } else {
-            std::cout << "Sorry, your guess is incorrect. The correct value is: "
-                      << this->GetShiftedValue() << std::endl;
+            std::cout << "Sorry, your guess is incorrect. The correct value is: " << this->GetShiftedValue()
+                      << std::endl;
             this->SetWrongGuesses(this->GetWrongGuesses() + 1);
         }
 
@@ -183,9 +183,9 @@ void Game::DisplayBitValue(uint8_t init_value, uint8_t shift_value) {
 }
 
 bool Game::PlayAgain() {
-    bool is_valid = false;
+    bool        is_valid = false;
     std::string foo;
-    int user_input;
+    int         user_input;
 
     do {
         std::cout << "Do you want to play again? (1 for Yes, 0 for No): ";
