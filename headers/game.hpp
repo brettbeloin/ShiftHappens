@@ -6,109 +6,137 @@
 #include <string>
 
 class Game {
-public:
-  Game() = default;
+  public:
+    void Start();
 
-  Game(int correct_guesses, int wrong_guesses, float accuracy, int round_number)
-      : correct_guesses(correct_guesses), wrong_guesses(wrong_guesses),
-        accuracy(accuracy), round_number(round_number) {}
-
-  void Start();
-
-  /*
-   * trim function and the WHITESPACE var comes from:
-   * https://www.scaler.com/topics/removing-whitespace-from-a-string-in-cpp/
-   */
-  std::string ltrim(const std::string &s) {
-    size_t start = s.find_first_not_of(WHITESPACE);
-    return (start == std::string::npos) ? "" : s.substr(start);
-  }
-
-  std::string rtrim(const std::string &s) {
-    size_t end = s.find_last_not_of(WHITESPACE);
-    return (end == std::string::npos) ? "" : s.substr(0, end + 1);
-  }
-
-  std::string trim(const std::string &s) { return rtrim(ltrim(s)); }
-
-  bool ValidateUserInput(std::string &string_user_input, int &user_input);
-
-  int GetInitValue() const { return init_value; }
-  int GetShiftValue() const { return shift_value; }
-  int GetShiftedValue() const { return shifted_value; }
-  int GetGuessValue() const { return guess_value; }
-
-  int GetRandomInitValue() const { return random_init_value; }
-  int GetRandomShiftValue() const { return random_shift_value; }
-
-  int GetCorrectGuesses() const { return correct_guesses; }
-  int GetWrongGuesses() const { return wrong_guesses; }
-  float GetAccuracy() const { return accuracy; }
-
-  int GetRoundNumber() const { return round_number; }
-
-  void SetInitValue(int value) { init_value = value; }
-  void SetShiftValue(int value) { shift_value = value; }
-  void SetShiftedValue(int value) { shifted_value = value; }
-  void SetGuessValue(int value) { guess_value = value; }
-
-  void SetRandomInitValue() {
-    srand(time(0));
-    random_init_value = rand() % 101;
-  }
-
-  void SetRandomShiftValue() {
-    srand(time(0));
-    random_shift_value = rand() % 101;
-  }
-
-  void SetCorrectGuesses(int value) { correct_guesses = value; }
-  void SetWrongGuesses(int value) { wrong_guesses = value; }
-  void SetAccuracy() {
-    if (wrong_guesses == 0) {
-      accuracy = 100;
-      return;
+    /*
+     * trim function and the WHITESPACE var comes from:
+     * https://www.scaler.com/topics/removing-whitespace-from-a-string-in-cpp/
+     */
+    std::string ltrim(const std::string &s) {
+        size_t start = s.find_first_not_of(WHITESPACE);
+        return (start == std::string::npos) ? "" : s.substr(start);
     }
 
-    accuracy = (static_cast<float>(correct_guesses) /
-                static_cast<float>(wrong_guesses)) *
-               100;
-  }
+    std::string rtrim(const std::string &s) {
+        size_t end = s.find_last_not_of(WHITESPACE);
+        return (end == std::string::npos) ? "" : s.substr(0, end + 1);
+    }
 
-  void SetRoundNumber(int value) { round_number = value; }
+    std::string trim(const std::string &s) {
+        return rtrim(ltrim(s));
+    }
 
-  std::string ToString() {
-    std::ostringstream ss;
+    bool ValidateUserInput(std::string &string_user_input, int &user_input);
 
-    ss << "Wins: " << correct_guesses << " Losses " << wrong_guesses
-       << " Accuracy " << accuracy << "%\n";
+    int GetInitValue() const {
+        return init_value;
+    }
+    int GetShiftValue() const {
+        return shift_value;
+    }
+    int GetShiftedValue() const {
+        return shifted_value;
+    }
+    int GetGuessValue() const {
+        return guess_value;
+    }
 
-    return ss.str();
-  }
+    int GetRandomInitValue() const {
+        return random_init_value;
+    }
+    int GetRandomShiftValue() const {
+        return random_shift_value;
+    }
 
-private:
-  const std::string WHITESPACE = " \n\r\t\f\v";
+    int GetCorrectGuesses() const {
+        return correct_guesses;
+    }
+    int GetWrongGuesses() const {
+        return wrong_guesses;
+    }
+    float GetAccuracy() const {
+        return accuracy;
+    }
 
-  int init_value;
-  int shift_value;
-  int shifted_value;
-  int guess_value;
+    int GetRoundNumber() const {
+        return round_number;
+    }
 
-  int random_init_value;
-  int random_shift_value;
+    void SetInitValue(int value) {
+        init_value = value;
+    }
+    void SetShiftValue(int value) {
+        shift_value = value;
+    }
+    void SetShiftedValue(int value) {
+        shifted_value = value;
+    }
+    void SetGuessValue(int value) {
+        guess_value = value;
+    }
 
-  int correct_guesses = 0;
-  int wrong_guesses = 0;
-  float accuracy = 0;
+    void SetRandomInitValue() {
+        srand(time(0));
+        random_init_value = rand() % 101;
+    }
 
-  int round_number = 1;
+    void SetRandomShiftValue() {
+        srand(time(0));
+        random_shift_value = rand() % 101;
+    }
 
-  int GetUserInput();
+    void SetCorrectGuesses(int value) {
+        correct_guesses = value;
+    }
+    void SetWrongGuesses(int value) {
+        wrong_guesses = value;
+    }
+    void SetAccuracy() {
+        if (wrong_guesses == 0) {
+            accuracy = 100;
+            return;
+        }
 
-  void GetShiftValues(int init_value, int shift_value);
-  void DisplayBitValue(uint8_t init_value, uint8_t shift_value);
+        accuracy = (static_cast<float>(correct_guesses) / static_cast<float>(wrong_guesses)) * 100;
+    }
 
-  bool CheckGuess(int guess, int shifted_value);
-  void PlayField(int value_shift);
-  bool PlayAgain();
+    void SetRoundNumber(int value) {
+        round_number = value;
+    }
+
+    std::string ToString() {
+        std::ostringstream ss;
+
+        ss << "Wins: " << correct_guesses << " Losses " << wrong_guesses << " Accuracy " << accuracy
+           << "%\n";
+
+        return ss.str();
+    }
+
+  private:
+    const std::string WHITESPACE = " \n\r\t\f\v";
+
+    int init_value;
+    int shift_value;
+    int shifted_value;
+    int guess_value;
+
+    int random_init_value;
+    int random_shift_value;
+
+    int correct_guesses = 0;
+    int wrong_guesses = 0;
+    float accuracy = 0;
+
+    int round_number = 1;
+
+    int GetUserInput();
+
+    void GetShiftValues(int init_value, int shift_value);
+    void DisplayBitValue(uint8_t init_value, uint8_t shift_value);
+
+    bool CheckGuess(int guess, int shifted_value);
+    void PlayField(int value_shift);
+    bool PlayAgain();
 };

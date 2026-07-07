@@ -1,8 +1,8 @@
 #include "game.hpp"
 
 int main() {
-  Game game;
-  game.Start();
+    Game game;
+    game.Start();
 
-  return 0;
+    return 0;
 }
