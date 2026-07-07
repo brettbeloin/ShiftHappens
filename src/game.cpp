@@ -25,11 +25,6 @@ void Game::Start() {
         case 3:
             GetShiftValues(this->GetInitValue(), this->GetShiftValue());
 
-            if ((this->GetInitValue() < 0 || this->GetInitValue() > 255) &&
-                (this->GetShiftValue() < 0 || this->GetShiftValue() > 255)) {
-                GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-            }
-
             this->SetShiftedValue(this->GetInitValue() & this->GetShiftValue());
             DisplayBitValue(this->GetInitValue(), this->GetShiftValue());
 
@@ -37,11 +32,6 @@ void Game::Start() {
             break;
         case 4:
             GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-
-            if ((this->GetInitValue() < 0 || this->GetInitValue() > 255) &&
-                (this->GetShiftValue() < 0 || this->GetShiftValue() > 255)) {
-                GetShiftValues(this->GetInitValue(), this->GetShiftValue());
-            }
 
             this->SetShiftedValue(this->GetInitValue() | this->GetShiftValue());
             DisplayBitValue(this->GetInitValue(), this->GetShiftValue());
@@ -59,7 +49,7 @@ void Game::Start() {
             // is_playing = false;
             return;
         default:
-            std::cout << "Invalid selection. Exiting the this->." << std::endl;
+            std::cout << "Invalid selection. Exiting the game." << std::endl;
         }
 
         std::cout << std::endl;
@@ -69,8 +59,8 @@ void Game::Start() {
     std::cout << this->ToString();
 }
 
-int Game::GetUserInput() {
-    int               user_input;
+std::uint8_t Game::GetUserInput() {
+    std::uint8_t      user_input;
     std::string       string_user_input;
 
     bool              valid_answer = false;
@@ -102,7 +92,7 @@ int Game::GetUserInput() {
     return user_input;
 }
 
-bool Game::ValidateUserInput(std::string &string_user_input, int &user_input) {
+bool Game::ValidateUserInput(std::string &string_user_input, std::uint8_t &user_input) {
     std::getline(std::cin, string_user_input);
     std::istringstream iss(trim(string_user_input));
     iss >> user_input;
@@ -122,7 +112,7 @@ bool Game::ValidateUserInput(std::string &string_user_input, int &user_input) {
     return true;
 }
 
-void Game::GetShiftValues(int init_value, int shift_value) {
+void Game::GetShiftValues(std::uint8_t init_value, std::uint8_t shift_value) {
     std::string foo;
     std::string bar;
     bool        valid_answer = false;
@@ -144,7 +134,7 @@ void Game::GetShiftValues(int init_value, int shift_value) {
     } while (!valid_answer);
 }
 
-void Game::PlayField(int shifted_value) {
+void Game::PlayField(std::uint8_t shifted_value) {
     std::string foo;
     bool        valid_answer = false;
 
@@ -167,14 +157,13 @@ void Game::PlayField(int shifted_value) {
     } while (!valid_answer);
 
     this->SetRoundNumber(this->GetRoundNumber() + 1);
-    this->SetAccuracy();
 }
 
-bool Game::CheckGuess(const int guess, int shifted_value) {
+bool Game::CheckGuess(const std::uint8_t guess, std::uint8_t shifted_value) {
     return guess == shifted_value;
 }
 
-void Game::DisplayBitValue(uint8_t init_value, uint8_t shift_value) {
+void Game::DisplayBitValue(std::uint8_t init_value, std::uint8_t shift_value) {
     std::cout << init_value << std::endl;
     std::cout << "Binary view: " << std::bitset<8>(init_value) << std::endl;
 
@@ -183,9 +172,9 @@ void Game::DisplayBitValue(uint8_t init_value, uint8_t shift_value) {
 }
 
 bool Game::PlayAgain() {
-    bool        is_valid = false;
-    std::string foo;
-    int         user_input;
+    bool         is_valid = false;
+    std::string  foo;
+    std::uint8_t user_input;
 
     do {
         std::cout << "Do you want to play again? (1 for Yes, 0 for No): ";
