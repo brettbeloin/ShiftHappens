@@ -92,12 +92,13 @@ int Game::GetUserInput() {
 
 bool Game::ValidateUserInput(std::string &string_user_input, int &user_input,
                              Game::diffculty_changes diffculty_changes) {
-    std::istringstream iss(trim(string_user_input));
+
     std::getline(std::cin, string_user_input);
+    std::istringstream iss(trim(string_user_input));
     iss >> user_input;
 
     if (!iss.eof()) {
-        std::cerr << "Bad input. All inputs must be numeric and fit in the range\n";
+        std::cerr << "Bad Input. not EOF\n";
         return false;
     }
 
