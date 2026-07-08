@@ -6,7 +6,7 @@ By presenting live, immediate hexadecimal and binary visual representations alon
 
 ## Build the Project
 ```bash
-git clone git@github.com:brettbeloin/ShiftHappens.git
+git clone https://github.com/brettbeloin/ShiftHappens
 cd ShiftHappens
 cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build
