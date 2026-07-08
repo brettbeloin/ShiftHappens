@@ -27,32 +27,37 @@ class Game {
         return rtrim(ltrim(s));
     }
 
-    bool         ValidateUserInput(std::string &string_user_input, std::uint8_t &user_input);
+    struct diffculty_changes {
+        int min;
+        int max;
+    };
 
-    std::uint8_t GetInitValue() const {
+    bool ValidateUserInput(std::string &string_user_input, int &user_input, const struct diffculty_changes);
+
+    int  GetInitValue() const {
         return init_value;
     }
-    std::uint8_t GetShiftValue() const {
+    int GetShiftValue() const {
         return shift_value;
     }
-    std::uint8_t GetShiftedValue() const {
+    int GetShiftedValue() const {
         return shifted_value;
     }
-    std::uint8_t GetGuessValue() const {
+    int GetGuessValue() const {
         return guess_value;
     }
 
-    std::uint8_t GetRandomInitValue() const {
+    int GetRandomInitValue() const {
         return random_init_value;
     }
-    std::uint8_t GetRandomShiftValue() const {
+    int GetRandomShiftValue() const {
         return random_shift_value;
     }
 
-    std::uint8_t GetCorrectGuesses() const {
+    int GetCorrectGuesses() const {
         return correct_guesses;
     }
-    std::uint8_t GetWrongGuesses() const {
+    int GetWrongGuesses() const {
         return wrong_guesses;
     }
 
@@ -60,20 +65,20 @@ class Game {
         return accuracy;
     }
 
-    std::uint8_t GetRoundNumber() const {
+    int GetRoundNumber() const {
         return round_number;
     }
 
-    void SetInitValue(std::uint8_t value) {
+    void SetInitValue(int value) {
         init_value = value;
     }
-    void SetShiftValue(std::uint8_t value) {
+    void SetShiftValue(int value) {
         shift_value = value;
     }
-    void SetShiftedValue(std::uint8_t value) {
+    void SetShiftedValue(int value) {
         shifted_value = value;
     }
-    void SetGuessValue(std::uint8_t value) {
+    void SetGuessValue(int value) {
         guess_value = value;
     }
 
@@ -87,11 +92,11 @@ class Game {
         random_shift_value = rand() % 101;
     }
 
-    void SetCorrectGuesses(std::uint8_t value) {
+    void SetCorrectGuesses(int value) {
         correct_guesses = value;
     }
 
-    void SetWrongGuesses(std::uint8_t value) {
+    void SetWrongGuesses(int value) {
         wrong_guesses = value;
     }
 
@@ -104,7 +109,7 @@ class Game {
         accuracy = (static_cast<float>(correct_guesses) / static_cast<float>(correct_guesses + wrong_guesses)) * 100;
     }
 
-    void SetRoundNumber(std::uint8_t value) {
+    void SetRoundNumber(int value) {
         round_number = value;
     }
 
@@ -119,26 +124,26 @@ class Game {
   private:
     const std::string WHITESPACE = " \n\r\t\f\v";
 
-    std::uint8_t      init_value;
-    std::uint8_t      shift_value;
-    std::uint8_t      shifted_value;
-    std::uint8_t      guess_value;
+    int               init_value;
+    int               shift_value;
+    int               shifted_value;
+    int               guess_value;
 
-    std::uint8_t      random_init_value;
-    std::uint8_t      random_shift_value;
+    int               random_init_value;
+    int               random_shift_value;
 
-    std::uint8_t      correct_guesses = 0;
-    std::uint8_t      wrong_guesses = 0;
+    int               correct_guesses = 0;
+    int               wrong_guesses = 0;
     float             accuracy = 0;
 
-    std::uint8_t      round_number = 1;
+    int               round_number = 1;
 
-    std::uint8_t      GetUserInput();
+    int               GetUserInput();
 
-    void              GetShiftValues(std::uint8_t init_value, std::uint8_t shift_value);
-    void              DisplayBitValue(std::uint8_t init_value, std::uint8_t shift_value);
+    void              GetShiftValues(int init_value, int shift_value);
+    void              DisplayBitValue(int init_value, int shift_value);
 
-    bool              CheckGuess(std::uint8_t guess, std::uint8_t shifted_value);
-    void              PlayField(std::uint8_t value_shift);
+    bool              CheckGuess(int guess, int shifted_value);
+    void              PlayField(int value_shift);
     bool              PlayAgain();
 };

@@ -1,7 +1,10 @@
 #include "game.hpp"
 #include <bitset>
+#include <cstdint>
 #include <iostream>
+#include <ostream>
 #include <string>
+#include <sys/types.h>
 
 void Game::Start() {
     std::cout << "Welcome to the Bit Shift Game!\n";
@@ -59,8 +62,8 @@ void Game::Start() {
     std::cout << this->ToString();
 }
 
-std::uint8_t Game::GetUserInput() {
-    std::uint8_t      user_input;
+int Game::GetUserInput() {
+    int               user_input;
     std::string       string_user_input;
 
     bool              valid_answer = false;
@@ -77,13 +80,8 @@ std::uint8_t Game::GetUserInput() {
         std::cout << "-------------------------" << std::endl;
         std::cout << "Enter your choice: ";
 
-        if (!ValidateUserInput(string_user_input, user_input)) {
+        if (!ValidateUserInput(string_user_input, user_input, {1, 6})) {
             continue;
-        }
-
-        if (user_input < 1 || user_input > 6) {
-            std::cerr << "Bad input. Input must be between: 1 and 6\n";
-            return false;
         }
 
         valid_answer = true;
@@ -92,9 +90,10 @@ std::uint8_t Game::GetUserInput() {
     return user_input;
 }
 
-bool Game::ValidateUserInput(std::string &string_user_input, std::uint8_t &user_input) {
-    std::getline(std::cin, string_user_input);
+bool Game::ValidateUserInput(std::string &string_user_input, int &user_input,
+                             Game::diffculty_changes diffculty_changes) {
     std::istringstream iss(trim(string_user_input));
+    std::getline(std::cin, string_user_input);
     iss >> user_input;
 
     if (!iss.eof()) {
@@ -109,23 +108,28 @@ bool Game::ValidateUserInput(std::string &string_user_input, std::uint8_t &user_
         return false;
     }
 
+    if (user_input < diffculty_changes.min || user_input > diffculty_changes.max) {
+        return false;
+    }
+
     return true;
 }
 
-void Game::GetShiftValues(std::uint8_t init_value, std::uint8_t shift_value) {
-    std::string foo;
-    std::string bar;
-    bool        valid_answer = false;
+void Game::GetShiftValues(int init_value, int shift_value) {
+    std::string             foo;
+    std::string             bar;
+    bool                    valid_answer = false;
+    Game::diffculty_changes diffculty_changes = {0, 255};
 
     do {
         std::cout << "Enter the initial value (integer): ";
-        if (!ValidateUserInput(foo, init_value)) {
+        if (!ValidateUserInput(foo, init_value, diffculty_changes)) {
             continue;
         }
         SetInitValue(init_value);
 
         std::cout << "Enter the number of bits to shift (integer): ";
-        if (!ValidateUserInput(bar, shift_value)) {
+        if (!ValidateUserInput(bar, shift_value, diffculty_changes)) {
             continue;
         }
 
@@ -134,13 +138,13 @@ void Game::GetShiftValues(std::uint8_t init_value, std::uint8_t shift_value) {
     } while (!valid_answer);
 }
 
-void Game::PlayField(std::uint8_t shifted_value) {
+void Game::PlayField(int shifted_value) {
     std::string foo;
     bool        valid_answer = false;
 
     do {
         std::cout << "Guess the shifted value: ";
-        if (!ValidateUserInput(foo, this->guess_value)) {
+        if (!ValidateUserInput(foo, this->guess_value, {0, 255})) {
             continue;
         }
 
@@ -159,11 +163,11 @@ void Game::PlayField(std::uint8_t shifted_value) {
     this->SetRoundNumber(this->GetRoundNumber() + 1);
 }
 
-bool Game::CheckGuess(const std::uint8_t guess, std::uint8_t shifted_value) {
+bool Game::CheckGuess(const int guess, int shifted_value) {
     return guess == shifted_value;
 }
 
-void Game::DisplayBitValue(std::uint8_t init_value, std::uint8_t shift_value) {
+void Game::DisplayBitValue(int init_value, int shift_value) {
     std::cout << init_value << std::endl;
     std::cout << "Binary view: " << std::bitset<8>(init_value) << std::endl;
 
@@ -172,19 +176,14 @@ void Game::DisplayBitValue(std::uint8_t init_value, std::uint8_t shift_value) {
 }
 
 bool Game::PlayAgain() {
-    bool         is_valid = false;
-    std::string  foo;
-    std::uint8_t user_input;
+    bool        is_valid = false;
+    std::string foo;
+    int         user_input;
 
     do {
         std::cout << "Do you want to play again? (1 for Yes, 0 for No): ";
 
-        if (!ValidateUserInput(foo, user_input)) {
-            continue;
-        }
-
-        if (user_input < 0 || user_input > 1) {
-            std::cerr << "Bad input. Input must be (1 for Yes, 0 for No)\n";
+        if (!ValidateUserInput(foo, user_input, {0, 1})) {
             continue;
         }
 
