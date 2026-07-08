@@ -1,10 +1,6 @@
 #include "game.hpp"
 #include <bitset>
-#include <cstdint>
 #include <iostream>
-#include <ostream>
-#include <string>
-#include <sys/types.h>
 
 void Game::Start() {
     std::cout << "Welcome to the Bit Shift Game!\n";
@@ -42,10 +38,8 @@ void Game::Start() {
             this->PlayField(this->GetShiftedValue());
             break;
         case 5:
-            std::cout << "The Random game is not Implemented yet" << std::endl;
-            continue;
-            // this->.PlayField(shifted_value, this->);
-            // break;
+            this->RandomMode();
+            break;
         case 6:
             std::cout << "Exiting the game. Goodbye!" << std::endl;
             std::cout << this->ToString();
@@ -65,14 +59,14 @@ void Game::Start() {
 int Game::GetUserInput() {
     int               user_input;
     std::string       string_user_input;
-
     bool              valid_answer = false;
+
     const std::string menu = "Select Mode: \n"
                              "1. Shift Left\n"
                              "2. Shift Right\n"
-                             "3. AND Shift (0 - 255)\n"
-                             "4. OR Shift (0 - 255)\n"
-                             "5. Random mode (Not Implamented)\n"
+                             "3. AND Shift\n"
+                             "4. OR Shift\n"
+                             "5. Random mode\n"
                              "6. Quit";
 
     do {
@@ -174,6 +168,59 @@ void Game::DisplayBitValue(int init_value, int shift_value) {
 
     std::cout << shift_value << std::endl;
     std::cout << "Binary view: " << std::bitset<8>(shift_value) << std::endl;
+}
+
+void Game::RandomMode() {
+    bool is_valid = false;
+    int  random_value;
+
+    do {
+        this->SetRandomInitValue(255);
+        this->SetRandomShiftValue(255);
+
+        random_value = (rand() % 4) + 1;
+
+        switch (random_value) {
+        case 1:
+            std::cout << "Random starting number: " << this->GetRandomInitValue() << "\n";
+            std::cout << "Operator: <<\n";
+            std::cout << "Random shift number: " << this->GetRandomShiftValue() << "\n";
+            this->SetShiftedValue(this->GetRandomInitValue() << this->GetRandomShiftValue());
+
+            break;
+        case 2:
+            std::cout << "Random starting number: " << this->GetRandomInitValue() << "\n";
+            std::cout << "Operator: >>\n";
+            std::cout << "Random shift number: " << this->GetRandomShiftValue() << "\n";
+            this->SetShiftedValue(this->GetRandomInitValue() >> this->GetRandomShiftValue());
+
+            break;
+        case 3:
+            std::cout << "Random starting number: " << this->GetRandomInitValue() << "\n";
+            std::cout << "Operator: &\n";
+            std::cout << "Random shift number: " << this->GetRandomShiftValue() << "\n";
+            this->SetShiftedValue(this->GetRandomInitValue() & this->GetRandomShiftValue());
+
+            break;
+        case 4:
+            std::cout << "Random starting number: " << this->GetRandomInitValue() << "\n";
+            std::cout << "Operator: |\n";
+            std::cout << "Random shift number: " << this->GetRandomShiftValue() << "\n";
+            this->SetShiftedValue(this->GetRandomInitValue() | this->GetRandomShiftValue());
+
+            break;
+        }
+
+        is_valid = true;
+    } while (!is_valid);
+
+    std::cout << random_value << '\n';
+
+    if (random_value >= 3) {
+        DisplayBitValue(this->GetRandomInitValue(), this->GetRandomShiftValue());
+    }
+
+    PlayField(this->GetShiftedValue());
 }
 
 bool Game::PlayAgain() {

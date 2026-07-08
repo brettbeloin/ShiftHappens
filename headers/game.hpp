@@ -1,11 +1,27 @@
 #pragma once
+#include <cstddef>
 #include <cstdlib>
 #include <ctime>
-#include <random>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 
 class Game {
+    // public facing objects
+  public:
+    struct diffculty_changes {
+        int min;
+        int max;
+    };
+
+    std::unordered_map<int, std::string> signs = {
+        {1, "<<"},
+        {2, ">>"},
+        {3,  "&"},
+        {4,  "|"}
+    };
+
+    // public facing methods
   public:
     void Start();
 
@@ -27,11 +43,6 @@ class Game {
         return rtrim(ltrim(s));
     }
 
-    struct diffculty_changes {
-        int min;
-        int max;
-    };
-
     bool ValidateUserInput(std::string &string_user_input, int &user_input, const struct diffculty_changes);
 
     int  GetInitValue() const {
@@ -50,6 +61,7 @@ class Game {
     int GetRandomInitValue() const {
         return random_init_value;
     }
+
     int GetRandomShiftValue() const {
         return random_shift_value;
     }
@@ -82,14 +94,12 @@ class Game {
         guess_value = value;
     }
 
-    void SetRandomInitValue() {
-        srand(time(0));
-        random_init_value = rand() % 101;
+    void SetRandomInitValue(std::size_t max_value) {
+        random_init_value = (rand() % max_value) + 1;
     }
 
-    void SetRandomShiftValue() {
-        srand(time(0));
-        random_shift_value = rand() % 101;
+    void SetRandomShiftValue(std::size_t max_value) {
+        random_shift_value = (rand() % max_value) + 1;
     }
 
     void SetCorrectGuesses(int value) {
@@ -145,5 +155,6 @@ class Game {
 
     bool              CheckGuess(int guess, int shifted_value);
     void              PlayField(int value_shift);
+    void              RandomMode();
     bool              PlayAgain();
 };
