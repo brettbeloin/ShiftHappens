@@ -21,9 +21,10 @@ cmake --build build
 - [x] Robust, stream-isolated console input parsing using `std::getline` and `std::istringstream`.
 - [x] Live visual binary display utilizing `std::bitset<8>` format.
 - [x] Standard operational modes for Left Shift (`<<`), Right Shift (`>>`), Bitwise AND (`&`), and Bitwise OR (`|`).
+- [x] Random Gameplay Mode: Selecting randomized operational modes (`<<`, `>>`, `&`, `|`) with mathematically safe bounds across the 8-bit unsigned range (0-255).
 
 ### Future Development Pipeline
-- [ ] **Random Gameplay Mode**: Selecting randomized operational modes (`<<`, `>>`, `&`, `|`) with mathematically safe bounds across the 8-bit unsigned range (0-255).
+- [ ] **General Bug Fixes**: continuous bug fixes. 
 - [ ] **Difficulty Selection**: Dynamic parameter configurations ranging from Easy (8-bit bounded constraints) up to Hard modes utilizing 64-bit integer tracking fields.
 - [ ] **Unit Testing Framework**: Structural verification tests to assert boundary rules and algorithmic computations.
-- [ ] **Graphical User Interface (GUI)**: Migrating the console-driven engine to a decoupled frontend layout utilizing an active graphics abstraction context.
+- [ ] **Graphical User Interface (GUI)**: Migrating the console-driven engine to a decoupled front end layout utilizing an active graphics abstraction context.

@@ -4,7 +4,6 @@
 #include <ctime>
 #include <sstream>
 #include <string>
-#include <unordered_map>
 
 class Game {
     // public facing objects
@@ -14,19 +13,12 @@ class Game {
         int max;
     };
 
-    std::unordered_map<int, std::string> signs = {
-        {1, "<<"},
-        {2, ">>"},
-        {3,  "&"},
-        {4,  "|"}
-    };
-
     // public facing methods
   public:
     void Start();
 
     /*
-     * trim function and the WHITESPACE var comes from:
+     * trim functions and the WHITESPACE var comes from:
      * https://www.scaler.com/topics/removing-whitespace-from-a-string-in-cpp/
      */
     std::string ltrim(const std::string &s) {

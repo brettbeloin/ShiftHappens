@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include <bitset>
 #include <iostream>
+#include <limits>
 
 void Game::Start() {
     std::cout << "Welcome to the Bit Shift Game!\n";
@@ -92,7 +93,7 @@ bool Game::ValidateUserInput(std::string &string_user_input, int &user_input,
     iss >> user_input;
 
     if (!iss.eof()) {
-        std::cerr << "Bad Input. not EOF\n";
+        std::cerr << "Bad Input. Not EOF\n";
         return false;
     }
 
@@ -139,7 +140,7 @@ void Game::PlayField(int shifted_value) {
 
     do {
         std::cout << "Guess the shifted value: ";
-        if (!ValidateUserInput(foo, this->guess_value, {0, 255})) {
+        if (!ValidateUserInput(foo, this->guess_value, {0, std::numeric_limits<int>::max()})) {
             continue;
         }
 
